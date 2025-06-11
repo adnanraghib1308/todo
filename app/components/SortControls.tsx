@@ -1,32 +1,10 @@
 import { Form } from '@remix-run/react'
-import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
 
 interface SortControlsProps {
   currentSort: string
 }
 
 export default function SortControls({ currentSort }: SortControlsProps) {
-  const getSortIcon = () => {
-    switch (currentSort) {
-      case 'priority-asc':
-        return <ArrowUp size={16} />
-      case 'priority-desc':
-        return <ArrowDown size={16} />
-      default:
-        return <ArrowUpDown size={16} />
-    }
-  }
-
-  const getSortLabel = () => {
-    switch (currentSort) {
-      case 'priority-asc':
-        return 'Priority: Low to High'
-      case 'priority-desc':
-        return 'Priority: High to Low'
-      default:
-        return 'Sort by Priority'
-    }
-  }
 
   return (
     <div className="glass rounded-xl p-4 shadow-lg">

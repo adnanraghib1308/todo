@@ -12,8 +12,7 @@ import { useEffect } from "react";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "TodoFlow - Beautiful Task Management" },
-    { name: "description", content: "A beautiful and intuitive todo application built with Remix" },
+    { title: "Todo APP" },
   ];
 };
 
@@ -76,7 +75,6 @@ export default function Index() {
             {/* <CheckSquare size={32} className="text-white" /> */}
             <h1 className="text-4xl font-bold text-white">Todo APP</h1>
           </div>
-          <p className="text-white/80 text-lg">Beautiful task management made simple</p>
         </div>
 
         {/* Stats */}
