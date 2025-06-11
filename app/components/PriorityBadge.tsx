@@ -1,11 +1,11 @@
 import { Priority } from '~/types/todo'
 
 interface PriorityBadgeProps {
-  priority: Priority
+  priority: string
   className?: string
 }
 
-const priorityConfig = {
+const priorityConfig: any = {
   HIGH: {
     label: 'High',
     className: 'bg-red-100 text-red-800 border-red-200',

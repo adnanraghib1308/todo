@@ -3,19 +3,7 @@ import { Priority } from '~/types/todo'
 import { Check, Trash2 } from 'lucide-react'
 import PriorityBadge from './PriorityBadge'
 
-interface Todo {
-  id: string
-  title: string
-  completed: boolean
-  priority: Priority
-  createdAt: string
-}
-
-interface TodoItemProps {
-  todo: Todo
-}
-
-export default function TodoItem({ todo }: TodoItemProps) {
+export default function TodoItem({ todo }: any) {
   return (
     <div className={`glass rounded-xl p-4 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.01] ${
       todo.completed ? 'opacity-75' : ''

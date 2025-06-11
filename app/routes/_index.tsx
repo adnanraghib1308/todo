@@ -3,11 +3,12 @@ import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { Priority } from '~/types/todo'
 
-import { getAllTodos, createTodo, toggleTodo, deleteTodo, sortTodos } from "~/lib/storage.server";
+import { getAllTodos, createTodo, toggleTodo, deleteTodo } from "lib/storage.server";
 import TodoForm from "~/components/TodoForm";
 import TodoItem from "~/components/TodoItem";
 import SortControls from "~/components/SortControls";
 import { CheckSquare } from 'lucide-react'
+import { useEffect } from "react";
 
 export const meta: MetaFunction = () => {
   return [
@@ -20,7 +21,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
   const sort = url.searchParams.get('sort') || 'priority-desc'
   
-  const todos = sortTodos(sort)
+  const todos = await getAllTodos(sort === 'priority-asc' ? 'asc' : 'desc');
 
   const stats = {
     total: todos.length,
@@ -28,7 +29,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     pending: todos.filter(todo => !todo.completed).length,
   }
 
-  return json({ todos, sort, stats })
+  return { todos, sort, stats }
 }
 
 export const action = async ({ request }: ActionFunctionArgs) => {
@@ -44,23 +45,23 @@ export const action = async ({ request }: ActionFunctionArgs) => {
         throw new Error('Title is required')
       }
 
-      createTodo(title.trim(), priority)
+      await createTodo(title.trim(), priority);
       break
     }
 
     case 'toggle': {
       const todoId = formData.get('todoId') as string
-      toggleTodo(todoId)
+      await toggleTodo(parseInt(todoId))
       break
     }
 
     case 'delete': {
       const todoId = formData.get('todoId') as string
-      deleteTodo(todoId)
+      await deleteTodo(parseInt(todoId))
       break
     }
   }
-  return null;
+  return { message: 'Action completed successfully' };
 }
 
 export default function Index() {
