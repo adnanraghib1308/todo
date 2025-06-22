@@ -27,7 +27,7 @@ export default function PriorityBadge({ priority, className = '' }: PriorityBadg
   const config = priorityConfig[priority]
   
   return (
-    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${config.className} ${className}`}>
+    <span data-testid="priority-badge" className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${config.className} ${className}`}>
       <span className={`w-1.5 h-1.5 rounded-full ${config.dotClassName}`}></span>
       {config.label}
     </span>

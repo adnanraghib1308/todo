@@ -35,5 +35,5 @@ export async function toggleTodo(id: number) {
 }
 
 export async function deleteTodo(id: number) {
-  return db.delete(todos).where(eq(todos.id, id))
+  await db.delete(todos).where(eq(todos.id, id))
 }

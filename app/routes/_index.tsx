@@ -1,14 +1,13 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { Priority } from '~/types/todo'
 
 import { getAllTodos, createTodo, toggleTodo, deleteTodo } from "lib/storage.server";
-import TodoForm from "~/components/TodoForm";
-import TodoItem from "~/components/TodoItem";
-import SortControls from "~/components/SortControls";
+import TodoForm from "../components/TodoForm";
+import TodoItem from "../components/TodoItem";
+import SortControls from "../components/SortControls";
 import { CheckSquare } from 'lucide-react'
-import { useEffect } from "react";
+import { z } from "zod";
 
 export const meta: MetaFunction = () => {
   return [
@@ -31,33 +30,44 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return { todos, sort, stats }
 }
 
+const TodoSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  priority: z.enum(["HIGH", "MEDIUM", "LOW"]),
+});
+
 export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData()
-  const action = formData.get('_action')
+  const formData = await request.formData();
+  const action = formData.get('_action');
 
   switch (action) {
     case 'create': {
-      const title = formData.get('title') as string
-      const priority = formData.get('priority') as Priority
+      const rawData = {
+        title: formData.get('title'),
+        priority: formData.get('priority'),
+      };
 
-      if (!title?.trim()) {
-        throw new Error('Title is required')
+      const result = TodoSchema.safeParse(rawData);
+
+      if (!result.success) {
+        // You can return errors to the client if needed
+        throw new Error(result.error.errors[0].message);
       }
 
+      const { title, priority } = result.data;
       await createTodo(title.trim(), priority);
-      break
+      break;
     }
 
     case 'toggle': {
-      const todoId = formData.get('todoId') as string
-      await toggleTodo(parseInt(todoId))
-      break
+      const todoId = formData.get('todoId') as string;
+      await toggleTodo(parseInt(todoId));
+      break;
     }
 
     case 'delete': {
-      const todoId = formData.get('todoId') as string
-      await deleteTodo(parseInt(todoId))
-      break
+      const todoId = formData.get('todoId') as string;
+      await deleteTodo(parseInt(todoId));
+      break;
     }
   }
   return { message: 'Action completed successfully' };

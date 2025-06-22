@@ -9,6 +9,14 @@ declare module "@remix-run/node" {
 }
 
 export default defineConfig({
+  test: {
+    environmentMatchGlobs: [
+      ["**/*.server.test.tsx", "node"],
+      ["**/*.test.tsx", "jsdom"],
+    ],
+    setupFiles: './vitest.setup.ts',
+    globals: true,
+  },
   plugins: [
     remix({
       future: {

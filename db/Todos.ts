@@ -1,3 +1,4 @@
+import { sql } from "drizzle-orm";
 import { boolean, pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
 
 export const todos = pgTable("todos", {
