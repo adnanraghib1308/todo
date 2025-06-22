@@ -17,15 +17,13 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package.json package-lock.json* ./
-RUN npm ci --omit=dev
-
-# Run Drizzle migrations
-RUN npx drizzle-kit migrate
+RUN npm ci
 
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/app ./app
+COPY --from=builder /app/drizzle.config.* ./
+COPY --from=builder /app/drizzle ./drizzle
 
-# 5. Expose port and set start command
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD npx drizzle-kit migrate && npm start
