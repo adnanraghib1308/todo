@@ -19,6 +19,9 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci --omit=dev
 
+# Run Drizzle migrations
+RUN npx drizzle-kit migrate
+
 COPY --from=builder /app/build ./build
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/app ./app
